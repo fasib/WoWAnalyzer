@@ -21,6 +21,7 @@ I will likely not have time to work on many more specs by myself, so the only wa
  * [Resto Druid](src/Parser/RestoDruid/README.md) (maintained by @blazyb)
  * [Resto Shaman](src/Parser/RestorationShaman/README.md) (maintained by @versaya)
  * [Mistweaver Monk](src/Parser/MistweaverMonk/README.md) (maintained by @anom0ly)
+ * Elemental Shaman (maintained by @fasib)
 
 ## License
 
