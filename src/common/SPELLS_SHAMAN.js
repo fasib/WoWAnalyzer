@@ -169,7 +169,21 @@ export default {
     name: 'Lightning Rod',
     icon: 'inv_rod_enchantedcobalt',
   },
-
+  THE_DECEIVERS_BLOOD_PACT: {
+    id: 214134,
+    name: 'The Deceiver\'s Blood Pact',
+    icon: 'spell_nature_earthshock',
+  },
+  ELEMENTAL_SHAMAN_T20_2SET_BONUS: {
+    id: 242281,
+    name: 'T20 2 Set Bonus',
+    icon: 'spell_fire_flameshock',
+  },
+  ELEMENTAL_SHAMAN_T20_2SET_BONUS_BUFF: {
+    id: 246594,
+    name: 'T20 2 Set Bonus Buff',
+    icon: 'spell_fire_flameshock',
+  },
   // Enhancement Shaman
   // TODO: add spells
 
