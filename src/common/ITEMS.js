@@ -295,12 +295,6 @@ const ITEMS = {
     quality: ITEM_QUALITIES.EPIC,
   },
   // DPS Trinkets
-  TARNISHED_SENTINEL_MEDALLION: {
-    id: 147017,
-    name: 'Tarnished Sentinel Medallion',
-    icon: 'inv_jewelcrafting_purpleowl.jpg',
-    quality: ITEM_QUALITIES.EPIC,
-  },
   TERROR_FROM_BELOW: {
     id: 147016,
     name: 'Terror From Below',

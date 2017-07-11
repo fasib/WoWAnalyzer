@@ -28,8 +28,6 @@ class GnawedThumbRing extends Module {
   }
 
   on_byPlayer_damage(event) {
-    const spellId = event.ability.guid;
-
     if(this.owner.selectedCombatant.hasBuff(SPELLS.GNAWED_THUMB_RING.id)) {
       this.damageIncrease += calculateEffectiveHealing(event, GNAWED_THUMB_RING_HEALING_INCREASE);
     }
