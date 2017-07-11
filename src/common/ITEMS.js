@@ -289,6 +289,24 @@ const ITEMS = {
     icon: 'inv_jewelcrafting_purpleowl.jpg',
     quality: ITEM_QUALITIES.EPIC,
   },
+  TERROR_FROM_BELOW: {
+    id: 147016,
+    name: 'Terror From Below',
+    icon: 'trade_archaeology_sharkjaws',
+    quality: ITEM_QUALITIES.EPIC,
+  },
+  SPECTRAL_THURIBLE: {
+    id: 147018,
+    name: 'Spectral Thurible',
+    icon: 'inv_6_2raid_trinket_1d',
+    quality: ITEM_QUALITIES.EPIC,
+  },
+  TARNISHED_SENTINEL_MEDALLION: {
+    id: 147017,
+    name: 'Tarnished Sentinel Medallion',
+    icon: 'inv_jewelcrafting_purpleowl',
+    quality: ITEM_QUALITIES.EPIC,
+  },
 };
 
 export default indexById(ITEMS);

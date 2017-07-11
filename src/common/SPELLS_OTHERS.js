@@ -105,17 +105,33 @@ export default {
     name: 'Ocean\'s Embrace',
     icon: 'inv_jewelcrafting_starofelune_02',
   },
-  // Item Abilities
-  SPECTRAL_BLAST: {
+  // Tomb dps trinkets
+  TERROR_FROM_BELOW: {
+    id: 242525,
+    name: 'Terror From Below',
+    icon: 'trade_archaeology_sharkjaws',
+  },
+  PIERCING_ANGUISH: { // For: SPECTRAL_THURIBLE
+    id: 246751,
+    name: 'Piercing Anguish',
+    icon: 'inv_spear_08',
+  },
+  SPECTRAL_BLAST: { // For: TARNISHED_SENTINEL_MEDALLION
     id: 246442,
     name: 'Spectral Blast',
-    icon: 'inv_axe_02',
+    icon: 'inv_jewelcrafting_purpleowl',
   },
   SPECTRAL_BOLT: {
     id: 242571,
     name: 'Spectral Bolt',
-    icon: 'ability_thunderking_thunderstruck',
+    icon: 'inv_jewelcrafting_purpleowl',
   },
+  SPECTRAL_OWL: { // Use from TARNISHED_SENTINEL_MEDALLION
+    id: 242570,
+    name: 'Spectral Owl',
+    icon: 'inv_jewelcrafting_purpleowl',
+  },
+  // Item Abilities
   MARCH_OF_THE_LEGION: {
     id: 228446,
     name: 'March of the Legion',

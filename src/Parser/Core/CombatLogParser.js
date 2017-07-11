@@ -23,6 +23,11 @@ import SeaStar from './Modules/Items/SeaStarOfTheDepthmother';
 import DeceiversGrandDesign from './Modules/Items/DeceiversGrandDesign';
 import PrePotion from './Modules/Items/PrePotion';
 import GnawedThumbRing from './Modules/Items/GnawedThumbRing';
+// Shared Pure DPS Epics
+import TerrorFromBelow from './Modules/Items/DPS/TerrorFromBelow';
+import SpectralThurible from './Modules/Items/DPS/SpectralThurible';
+import TarnishedSentinelMedallion from './Modules/Items/DPS/TarnishedSentinelMedallion';
+
 
 import ParseResults from './ParseResults';
 import SUGGESTION_IMPORTANCE from './ISSUE_IMPORTANCE';
@@ -62,6 +67,10 @@ class CombatLogParser {
     barbaricMindslaver: BarbaricMindslaver,
     seaStar: SeaStar,
     deceiversGrandDesign: DeceiversGrandDesign,
+
+    terrorFromBelow: TerrorFromBelow,
+    spectralThurible: SpectralThurible,
+    tarnishedSentinelMedallion: TarnishedSentinelMedallion,
   };
   // Override this with spec specific modules
   static specModules = {};
@@ -218,7 +227,9 @@ class CombatLogParser {
 
     const fightDuration = this.fightDuration;
     const getPercentageOfTotal = healingDone => healingDone / this.totalHealing;
+    const getPercentageOfTotalDamage = damageDone => damageDone / this.totalDamage;
     const formatItemHealing = healingDone => `${formatPercentage(getPercentageOfTotal(healingDone))} % / ${formatNumber(healingDone / fightDuration * 1000)} HPS`;
+    const formatItemDamage = damageDone => `${formatPercentage(getPercentageOfTotalDamage(damageDone))} % / ${formatNumber(damageDone / fightDuration * 1000)} DPS`;
 
     if (this.modules.prydaz.active) {
       results.items.push({
@@ -305,7 +316,9 @@ class CombatLogParser {
     if (this.modules.gnawedThumbRing.active) {
       results.items.push({
         item: ITEMS.GNAWED_THUMB_RING,
-        result: formatItemHealing(this.modules.gnawedThumbRing.healingIncreaseHealing),
+        result: this.modules.gnawedThumbRing.healingIncreaseHealing > this.modules.gnawedThumbRing.damageIncrease ? 
+          formatItemHealing(this.modules.gnawedThumbRing.healingIncreaseHealing) :
+          formatItemDamage(this.modules.gnawedThumbRing.damageIncrease),
       });
     }
     if (this.modules.archiveOfFaith.active) {
@@ -361,6 +374,27 @@ class CombatLogParser {
           icon: ITEMS.DECEIVERS_GRAND_DESIGN.icon,
         });
       }
+    }
+
+    if (this.modules.terrorFromBelow.active) {
+      results.items.push({
+        item: ITEMS.TERROR_FROM_BELOW,
+        result: formatItemDamage(this.modules.terrorFromBelow.damage),
+      });
+    }
+
+    if (this.modules.spectralThurible.active) {
+      results.items.push({
+        item: ITEMS.SPECTRAL_THURIBLE,
+        result: formatItemDamage(this.modules.spectralThurible.damage),
+      });
+    }
+
+    if (this.modules.tarnishedSentinelMedallion.active) {
+      results.items.push({
+        item: ITEMS.TARNISHED_SENTINEL_MEDALLION,
+        result: formatItemDamage(this.modules.tarnishedSentinelMedallion.damage),
+      });
     }
 
     return results;
