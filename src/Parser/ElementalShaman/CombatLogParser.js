@@ -122,7 +122,6 @@ class CombatLogParser extends MainCombatLogParser {
 
     if (this.modules.totemMastery.active) {
       uptimeTotems = this.modules.totemMastery.getUptime(fightDuration).uptimeResonance;
-      console.log(uptimeTotems)
       if (uptimeTotems < 0.94) {
         results.addIssue({
           issue: `Your totem placement can be improved. ${formatPercentage(uptimeTotems)}%`,
