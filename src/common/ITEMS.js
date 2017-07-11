@@ -125,6 +125,18 @@ const ITEMS = {
     icon: 'inv_helm_mail_korkronshaman_d_01',
     quality: ITEM_QUALITIES.LEGENDARY,
   },
+  EYE_OF_THE_TWISTING_NETHER: {
+    id: 137050,
+    name: 'Eye of the Twisting Nether',
+    icon: 'inv_jewelry_ring_ahnqiraj_02',
+    quality: ITEM_QUALITIES.LEGENDARY,
+  },
+  PRISTINE_PROTO_SCALE_GIRDLE: {
+    id: 137083,
+    name: 'Pristine Proto-Scale Girdle',
+    icon: 'inv_belt_mail_panda_b_01white',
+    quality: ITEM_QUALITIES.LEGENDARY,
+  },
   // PRIEST LEGENDARIES
   CORD_OF_MAIEV_PRIESTESS_OF_THE_MOON: {
     id: 133800,

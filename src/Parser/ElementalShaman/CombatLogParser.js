@@ -3,10 +3,10 @@ import React from 'react';
 import SpellLink from 'common/SpellLink';
 import SpellIcon from 'common/SpellIcon';
 import Icon from 'common/Icon';
-// import ITEMS from 'common/ITEMS';
+import ITEMS from 'common/ITEMS';
 import SPELLS from 'common/SPELLS';
-// import ItemLink from 'common/ItemLink';
-// import ItemIcon from 'common/ItemIcon';
+import ItemLink from 'common/ItemLink';
+import ItemIcon from 'common/ItemIcon';
 
 import StatisticBox from 'Main/StatisticBox';
 import SuggestionsTab from 'Main/SuggestionsTab';
@@ -23,6 +23,11 @@ import ManaTab from './Modules/Main/MaelstromTab';
 import CooldownTracker from './Modules/Features/CooldownTracker';
 import ProcTracker from './Modules/Features/ProcTracker';
 import AlwaysBeCasting from './Modules/Features/AlwaysBeCasting';
+
+import EyeOfTwistingNether from './Modules/Items/EyeOfTwistingNether';
+import PristineProtoScaleGirdle from './Modules/Items/PristineProtoScaleGirdle';
+import TotemMastery from './Modules/Items/TotemMastery';
+import Tier20_2set from './Modules/Items/Tier20_2set';
 
 import './Modules/Main/main.css';
 
@@ -61,14 +66,21 @@ class CombatLogParser extends MainCombatLogParser {
     alwaysBeCasting: AlwaysBeCasting,
     cooldownTracker: CooldownTracker,
     procTracker: ProcTracker,
-
+    totemMastery: TotemMastery,
+    // Tier sets:
+    tier20_2set: Tier20_2set,
     // Legendaries:
+    eyeOfTwistingNether: EyeOfTwistingNether,
+    pristineProtoScaleGirdle: PristineProtoScaleGirdle,
   };
 
   generateResults() {
     const results = super.generateResults();
-    
-    // const hasElementalBlast = this.selectedCombatant.hasTalent(SPELLS.ELEMENTAL_BLAST_TALENT.id);
+
+    const getPercentageOfTotalDamage = damageDone => damageDone / this.totalDamage;
+    const formatItemDamage = damageDone => `${formatPercentage(getPercentageOfTotalDamage(damageDone))} % / ${formatNumber(damageDone / fightDuration * 1000)} DPS`;
+
+    const hasElementalBlast = this.selectedCombatant.hasTalent(SPELLS.ELEMENTAL_BLAST_TALENT.id);
     // const hasEchosElements = this.selectedCombatant.hasTalent(SPELLS.ECHO_OF_THE_ELEMENTS_TALENT.id);
     // const hasAscendance = this.selectedCombatant.hasTalent(SPELLS.ASCENDANCE_ELEMENTAL_TALENT.id);
     // const hasLightningRod = this.selectedCombatant.hasTalent(SPELLS.LIGHTNING_ROD.id);
@@ -98,6 +110,27 @@ class CombatLogParser extends MainCombatLogParser {
     const nonDpsTimePercentage = this.modules.alwaysBeCasting.totalDamagingTimeWasted / fightDuration;
     const deadTimePercentage = this.modules.alwaysBeCasting.totalTimeWasted / fightDuration;
 
+    let uptimeFire = 0;
+    let uptimeFrost = 0;
+    let uptimeNature = 0;
+    if (this.modules.eyeOfTwistingNether.active) {
+      uptimeFire = (this.modules.eyeOfTwistingNether.uptimeFire / fightDuration * 100);
+      uptimeFrost = (this.modules.eyeOfTwistingNether.uptimeFrost / fightDuration * 100);
+      uptimeNature = (this.modules.eyeOfTwistingNether.uptimeNature / fightDuration * 100);
+    }
+    let uptimeTotems = 0;
+
+    if (this.modules.totemMastery.active) {
+      uptimeTotems = this.modules.totemMastery.getUptime(fightDuration).uptimeResonance;
+      console.log(uptimeTotems)
+      if (uptimeTotems < 0.94) {
+        results.addIssue({
+          issue: `Your totem placement can be improved. ${formatPercentage(uptimeTotems)}%`,
+          icon: 'spell_nature_wrathofair_totem',
+          importance: getIssueImportance(deadTimePercentage, 0.95, 0.98, false),
+        });
+      }
+    }
     if (nonDpsTimePercentage > 0.3) {
       results.addIssue({
         issue: `[NYI] Your non DPS time can be improved. Try to cast damaging spells more regularly (${Math.round(nonDpsTimePercentage * 100)}% non DPS time).`,
@@ -207,6 +240,7 @@ class CombatLogParser extends MainCombatLogParser {
         )}
         label={'Overload procs'}
       />,
+      (hasElementalBlast &&
       <StatisticBox
         icon={<SpellIcon id={SPELLS.ELEMENTAL_BLAST.id} />}
         value={`${formatPercentage(elementalBlastUptime)} %`}
@@ -215,12 +249,45 @@ class CombatLogParser extends MainCombatLogParser {
             Uptime
           </dfn>
         )}
-      />,
+      />),
+      (this.modules.totemMastery.active &&
+      <StatisticBox
+        icon={<SpellIcon id={SPELLS.TOTEM_MASTERY_TALENT.id} />}
+        value={`${formatPercentage(uptimeTotems)} %`}
+        label={(
+          <dfn data-tip={`Ember Flameshock Buff: ${formatItemDamage(this.modules.totemMastery.flameshockDamage)}`}>
+            Uptime
+          </dfn>
+        )}
+      />),
     ];
 
     results.items = [
       ...results.items,
-      /*TODO*/
+      this.modules.eyeOfTwistingNether.active && {
+        id: ITEMS.EYE_OF_THE_TWISTING_NETHER.id,
+        icon: <ItemIcon id={ITEMS.EYE_OF_THE_TWISTING_NETHER.id} />,
+        title: <ItemLink id={ITEMS.EYE_OF_THE_TWISTING_NETHER.id} />,
+        result: (
+          <dfn data-tip={`Uptime of the <span style="color: #ea1413">fire</span>, <span style="color: #2be3fb">frost</span> and <span style="color: #c0ef4b">nature</span> buffs. Added ${formatNumber(this.modules.eyeOfTwistingNether.damage)} dmg`}>
+            <span style={{color:'#ea1413'}}>{`${(uptimeFire || 0).toFixed(2)} %`}</span>{' '}
+            <span style={{color:'#2be3fb'}}>{`${(uptimeFrost|| 0).toFixed(2)} %`}</span>{' '}
+            <span style={{color:'#c0ef4b'}}>{`${(uptimeNature || 0).toFixed(2)} %`}</span> uptime {`/ ${formatNumber(this.modules.eyeOfTwistingNether.damage/ fightDuration * 1000)} DPS`}
+          </dfn>
+        ),
+      },
+      this.modules.pristineProtoScaleGirdle.active && {
+        id: ITEMS.PRISTINE_PROTO_SCALE_GIRDLE.id,
+        icon: <ItemIcon id={ITEMS.PRISTINE_PROTO_SCALE_GIRDLE.id} />,
+        title: <ItemLink id={ITEMS.PRISTINE_PROTO_SCALE_GIRDLE.id} />,
+        result: formatItemDamage(this.modules.pristineProtoScaleGirdle.damage),
+      },
+      this.modules.tier20_2set.active && {
+        id: SPELLS.ELEMENTAL_SHAMAN_T20_2SET_BONUS.id,
+        icon: <SpellIcon id={SPELLS.ELEMENTAL_SHAMAN_T20_2SET_BONUS.id} />,
+        title: <SpellLink id={SPELLS.ELEMENTAL_SHAMAN_T20_2SET_BONUS.id} />,
+        result: formatItemDamage(this.modules.tier20_2set.damage),
+      },      
     ];
 
     results.tabs = [
